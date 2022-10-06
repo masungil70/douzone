@@ -26,12 +26,20 @@ public class WaitNotifyExample {
 		new Thread(new ArrayReadThread(arr)).start();
 		
 		for (int i=0;i<arr.length;i++) {
-			arr[i] = 200 + i;
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 			}
+			arr[i] = 200 + i;
 		}
 		
+//		for (int i=0;i<arr.length;i++) {
+//			System.out.println(Thread.currentThread().getName() + " : " + arr[i]);
+//			try {
+//				Thread.sleep(50);
+//			} catch (InterruptedException e) {
+//			}
+//		}
+
 	}
 }
