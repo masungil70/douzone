@@ -1,46 +1,62 @@
 package ch14.sec09.exam02;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class RunnableExecuteExample2 {
-
 	public static void main(String[] args) {
-		//1000개의 메일 생성
-		String[][] mails = new String[1000][3];
-		for(int i=0; i<mails.length; i++) {
-			mails[i][0] = "admin@my.com";
-			mails[i][1] = "member"+i+"@my.com";
-			mails[i][2] = "신상품 입고";
-		}
 
-//		
-//		for(int i=0; i<1000; i++) {
-//			String from = mails[i][0];
-//			String to = mails[i][1];
-//			String content = mails[i][2];
-//			System.out.println( from + " ==> " + to + ": " + content);
-//		}
+		int endValue = 100000000;
+		double sum = 0;
 		
+		long tick = System.nanoTime();
+		for (int i=1;i<=endValue;i++) {
+			sum += i;
+		}
+		System.out.println("1 : 합계 : " + sum);
+		System.out.println("1 : 반복문 실행 시간 : " + (System.nanoTime() - tick));
 		
 		//ExecutorService 생성
-		ExecutorService executorService = Executors.newFixedThreadPool(5);
-		
-		//이메일을 보내는 작업 생성 및 처리 요청
-		for(int i=0; i<1000; i++) {
-			final int idx = i;
-			executorService.execute(new Runnable() {
+		ExecutorService executorService = Executors.newFixedThreadPool(10);
+
+		tick = System.nanoTime();
+		int size = 10;
+		int length = endValue / size;
+		sum = 0;
+		//스레드 실행
+		List<Future<Double>> futures = new ArrayList<>(); 
+		for (int i=0;i<size;i++) {
+			int from = i*length + 1;
+			int to = (i+1) * length;
+			futures.add(executorService.submit(new Callable<Double>() {
 				@Override
-				public void run() {
-					Thread thread = Thread.currentThread();
-					String from = mails[idx][0];
-					String to = mails[idx][1];
-					String content = mails[idx][2];
-					System.out.println("[" + thread.getName() + "] " + from + " ==> " + to + ": " + content);
+				public Double call() throws Exception {
+					double sum = 0;
+					for(int i=from; i<=to; i++) {
+						sum += i;
+					}
+					return sum;
 				}
-			});
+			}));
 		}
+		
+		try {
+			for (Future<Double> future : futures) {
+				sum += future.get();
+			}
 			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("2 : 합계 : " + sum);
+		System.out.println("2 : 스레드 실행 시간 : " + (System.nanoTime() - tick));
+		
+		
 		//ExecutorService 종료
 		executorService.shutdown();
 	}
