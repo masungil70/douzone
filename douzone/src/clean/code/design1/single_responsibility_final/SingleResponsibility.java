@@ -8,7 +8,24 @@ import java.util.List;
 ////////////////////////////////////////
 //고객의 요구 사항 추가 
 //메모장의 내용을 파일에 저장 기능 추가 요구 
-
+//class Calc<T> {
+//	public T add(T a, T b) {
+//		//1, 2
+//		return a + b;
+//	}
+//}
+//
+//class Dub {
+//
+//	
+//	void func() {
+//		Calc<Integer> a = new Calc();
+//		Calc<Double> d = new Calc();
+//		int r1    = a.add(10, 20); //1
+//		double r2 = d.add(10.0f, 123.455); //1
+//	}
+//}
+//
 
 class Journal {
     private String title; //제목 

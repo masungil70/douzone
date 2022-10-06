@@ -3,15 +3,28 @@ package clean.code.design5.dependency_inversion.step3;
 import java.util.ArrayList;
 import java.util.List;
 
-interface Animal {
-	void speak();
-};
+//abstract class Animal {
+//	abstract void speak1();
+//	abstract void speak2();
+//	abstract void speak3();
+//};
 
+interface Animal {
+	public static final int MAX_VOLUME = 10; //상수
+	public void speak(); //추상메소드
+	
+	public default int add(int a, int b) {
+		return a + b;
+	}
+};
 
 //low level
 class Cat implements Animal {
+
+	@Override
 	public void speak() {
-		System.out.println("야옹~~~");
+		// TODO Auto-generated method stub
+		
 	}
 }
 
